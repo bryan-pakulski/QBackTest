@@ -15,10 +15,12 @@ C++ Backtesting engine focusing on cryptocurrencies.
 ### Example Bot
 ```json
 {
-  "name": "test_bot1"
-  "actions": {
-    ...
-  }
+  "name": "test_bot1",
+  "actions": [
+    {
+      "...": "..."
+    }
+  ]
 }
 ```
 
