@@ -3,17 +3,19 @@
 #include <iostream>
 
 void DataEngine::loadData(std::string filePath) {
-	std::cout << "LOADING FILE: " << filePath << std::endl;
 
-	io::CSVReader<3> in(filePath);
-	in.read_header(io::ignore_extra_column, "vendor", "size", "speed");
+    try {
+        io::CSVReader<3> in(filePath);
+        in.read_header(io::ignore_extra_column, "vendor", "size", "speed");
 
-	std::string vendor; int size; double speed;
+        std::string vendor; int size; double speed;
 
-	while(in.read_row(vendor, size, speed)){
-		// do stuff with the data
-	}
-
+        while(in.read_row(vendor, size, speed)){
+            // do stuff with the data
+        }
+    } catch (io::error::can_not_open_file){
+        ErrorHandler::GetInstance().setError("Unable to open file: " + filePath);
+    }
 }
 
 DataEngine::DataEngine() {

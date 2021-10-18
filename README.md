@@ -25,8 +25,7 @@ C++ Backtesting engine focusing on cryptocurrencies.
 ```
 
 ### Supported indicators
-- SMA
-- BOLLINGER
+- TODO:
 
 ## Dependencies
 
@@ -38,3 +37,9 @@ C++ Backtesting engine focusing on cryptocurrencies.
 ## Building
 
 CmakeLists contains all dependency links via github, running cmake should automatically build the QBackTest application.
+
+## TODO
+- Implement Bot Manager
+- Implement Visualisation
+- Implement Data Engine
+- Implement IMGUI extensions: https://github.com/ocornut/imgui/wiki/Useful-Extensions#file-browsers--file-dialog

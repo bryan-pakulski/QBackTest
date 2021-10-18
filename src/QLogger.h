@@ -5,11 +5,11 @@
 #include <algorithm>
 #include <fstream>
 
-class QuanLogger {
+class QLogger {
 
 public:
-	static QuanLogger &GetInstance() {
-		static QuanLogger logger;
+	static QLogger &GetInstance() {
+		static QLogger logger;
 		return logger;
 	}
 
@@ -26,19 +26,19 @@ public:
 	}
 
 	// Prohibit external replication constructs
-	QuanLogger(QuanLogger const&) = delete;
+	QLogger(QLogger const&) = delete;
 	// Prohibit external assignment operations
-	void operator=(QuanLogger const&) = delete;
+	void operator=(QLogger const&) = delete;
 
 private:
 	// Output file
 	std::ofstream log;
 
-	QuanLogger() {
+	QLogger() {
 		log.open("QLog.txt", std::ios_base::app);
 	}
 
-	~QuanLogger() {
+	~QLogger() {
 		log.close();
 	}
 

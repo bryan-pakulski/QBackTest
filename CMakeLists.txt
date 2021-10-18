@@ -107,7 +107,7 @@ find_package(OpenGL REQUIRED)  # for Dear ImGui
 find_package(Threads REQUIRED) # for GLFW
 find_package(X11 REQUIRED)     # for GLFW
 
-add_executable(QBackTest main.cpp src/Handlers/DataEngine/DataEngine.cpp src/Handlers/DataEngine/DataEngine.h)
+add_executable(QBackTest main.cpp src/Handlers/DataEngine/DataEngine.cpp)
 
 target_include_directories(
         QBackTest PRIVATE
@@ -118,6 +118,7 @@ target_include_directories(
         ${imgui_SOURCE_DIR}/backends
         ${imgui_SOURCE_DIR}/misc/cpp
         ${fast-csv_SOURCE_DIR}
+        lib/L2DFileDialog
 )
 
 target_link_libraries(

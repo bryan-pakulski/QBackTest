@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../QuanLogger.h"
+#include "../QLogger.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -54,9 +54,9 @@ private:
 
 	QDisplay() {
 		if (!glfwInit()) {
-			QuanLogger::GetInstance().Error("Couldn't initialize GLFW");
+			QLogger::GetInstance().Error("Couldn't initialize GLFW");
 		} else {
-			QuanLogger::GetInstance().Info("GLFW initialized");
+			QLogger::GetInstance().Info("GLFW initialized");
 		}
 
 		// setup GLFW window
@@ -114,7 +114,7 @@ private:
 		);
 
 		if (!window) {
-			QuanLogger::GetInstance().Error("Couldn't create a GLFW window");
+			QLogger::GetInstance().Error("Couldn't create a GLFW window");
 			CleanupDisplay();
 		}
 
@@ -138,10 +138,10 @@ private:
 		ImGui_ImplOpenGL3_Init(glsl_version.c_str());
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-			QuanLogger::GetInstance().Error("Couldn't initialize GLAD");
+			QLogger::GetInstance().Error("Couldn't initialize GLAD");
 			CleanupDisplay();
 		} else {
-			QuanLogger::GetInstance().Info("GLAD initialized");
+			QLogger::GetInstance().Info("GLAD initialized");
 		}
 
 		int actualWindowWidth, actualWindowHeight;
