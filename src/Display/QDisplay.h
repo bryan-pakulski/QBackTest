@@ -30,9 +30,9 @@ private:
 	int windowWidth = 1200;
 	int windowHeight = 800;
 
-	float backgroundR = 0.1f;
-	float backgroundG = 0.3f;
-	float backgroundB = 0.2f;
+	float backgroundR = 0.45f;
+	float backgroundG = 0.44f;
+	float backgroundB = 0.48f;
 
 	static void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 		glViewport(0, 0, width, height);

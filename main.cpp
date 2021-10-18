@@ -2,7 +2,6 @@
 #include <iostream>
 
 #include "src/Display/QDisplay.h"
-#include "src/Display/QDisplay_FileInput.h"
 #include "src/Display/ErrorHandler.h"
 #include "src/Display/QDisplay_MenuBar.h"
 
@@ -28,8 +27,8 @@ int main() {
         // Menu Bar
         QDisplay_MainMenu();
 
-		// 1. File loading
-		QDisplay_LoadFile(&dEngine);
+		// File Handling
+		QDisplay_FileDialog(&dEngine);
 
 		// 2. Bot management
 

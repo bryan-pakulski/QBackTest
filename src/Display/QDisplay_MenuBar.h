@@ -2,27 +2,39 @@
 
 #include <imgui.h>
 #include <L2DFileDialog.h>
+#include "../Handlers/DataEngine/DataEngine.h"
 
-void QDisplay_MainMenu(DataEngine* dEngine) {
-    static std::string fileName;
+static std::string fileName;
+bool fileDialogOpen = false;
 
+void QDisplay_MainMenu() {
     if(ImGui::BeginMainMenuBar())
     {
         if (ImGui::BeginMenu("File"))
         {
             if(ImGui::MenuItem("Import CSV"))
             {
-                FileDialog::fileDialogOpen = true;
-
-                if (FileDialog::fileDialogOpen == true) {
-                    FileDialog::ShowFileDialog(&FileDialog::fileDialogOpen, fileName);
-
-                    dEngine->loadData(fileName);
-                }
+				fileDialogOpen = true;
+				FileDialog::fileDialogOpen = true;
             }
             ImGui::EndMenu();
         }
 
         ImGui::EndMainMenuBar();
     }
+}
+
+void QDisplay_FileDialog(DataEngine* dEngine) {
+	if (fileDialogOpen) {
+
+		// Once selection has been made parse results
+		if (FileDialog::fileDialogOpen) {
+			FileDialog::ShowFileDialog(&fileDialogOpen, fileName);
+		} else {
+			if (!fileName.empty()) {
+				dEngine->loadData(fileName);
+			}
+			fileDialogOpen = false;
+		}
+	}
 }
