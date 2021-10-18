@@ -10,7 +10,7 @@ C++ Backtesting engine focusing on cryptocurrencies.
 - Multiple indicators supported (see below for list)
 
 ### Currently support exchanges 
-- Binance
+- Binance https://github.com/binance/binance-public-data/
 
 ### Example Bot
 ```json
