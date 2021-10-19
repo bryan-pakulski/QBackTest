@@ -91,15 +91,16 @@ target_include_directories(
 
 # Fast CSV
 FetchContent_Declare(
-        fast-csv
-        GIT_REPOSITORY https://github.com/ben-strasser/fast-cpp-csv-parser.git
+        rapid-csv
+        GIT_REPOSITORY https://github.com/d99kris/rapidcsv.git
+        GIT_TAG v8.53
 )
-FetchContent_MakeAvailable(fast-csv)
-FetchContent_GetProperties(fast-csv)
-if(NOT fast-csv_POPULATED)
-    FetchContent_Populate(fast-csv)
+FetchContent_MakeAvailable(rapid-csv)
+FetchContent_GetProperties(rapid-csv)
+if(NOT rapid-csv_POPULATED)
+    FetchContent_Populate(rapid-csv)
     add_subdirectory(
-            ${fast-csv_SOURCE_DIR}
+            ${rapid-csv_SOURCE_DIR}
     )
 endif()
 
@@ -117,7 +118,7 @@ target_include_directories(
         ${imgui_SOURCE_DIR}
         ${imgui_SOURCE_DIR}/backends
         ${imgui_SOURCE_DIR}/misc/cpp
-        ${fast-csv_SOURCE_DIR}
+        ${rapid-csv_SOURCE_DIR}/src
         lib/L2DFileDialog
 )
 

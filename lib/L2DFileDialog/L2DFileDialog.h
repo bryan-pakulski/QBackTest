@@ -39,6 +39,9 @@ namespace FileDialog {
 	};
 
 	static bool fileDialogOpen = false;
+	const char* file_sources[] = {"Binance", "test", "test2"};
+	static int file_source_selection = 0;
+
 	//forward declarations
 	void ShowFileDialog(bool* open, std::filesystem::path& buffer, FileDialogType type = FileDialogType::OpenFile);
 	void ShowFileDialog(bool* open, std::string& buffer, FileDialogType type = FileDialogType::OpenFile);
@@ -266,6 +269,10 @@ namespace FileDialog {
 					}
 				}
 			}
+			// BryanP - Custom list box for selecting data source
+			ImGui::SameLine();
+			file_source_selection = 0;
+			ImGui::ListBox("Data Source", &file_source_selection, file_sources, IM_ARRAYSIZE(file_sources), 1);
 
 			if (fileDialogError.size() > 0) {
 				ImGui::TextColored(ImColor(1.0f, 0.0f, 0.2f, 1.0f), &fileDialogError[0]);

@@ -8,15 +8,19 @@ static std::string fileName;
 bool fileDialogOpen = false;
 
 void QDisplay_MainMenu() {
-    if(ImGui::BeginMainMenuBar())
-    {
-        if (ImGui::BeginMenu("File"))
-        {
-            if(ImGui::MenuItem("Import CSV"))
-            {
+
+    if(ImGui::BeginMainMenuBar()) {
+
+        if (ImGui::BeginMenu("File")) {
+
+            if(ImGui::MenuItem("Import CSV")) {
 				fileDialogOpen = true;
 				FileDialog::fileDialogOpen = true;
             }
+
+			if(ImGui::MenuItem("Open Log")) {
+				//TODO: open txt file
+			}
             ImGui::EndMenu();
         }
 
@@ -25,14 +29,14 @@ void QDisplay_MainMenu() {
 }
 
 void QDisplay_FileDialog(DataEngine* dEngine) {
-	if (fileDialogOpen) {
 
+	if (fileDialogOpen) {
 		// Once selection has been made parse results
 		if (FileDialog::fileDialogOpen) {
 			FileDialog::ShowFileDialog(&fileDialogOpen, fileName);
 		} else {
 			if (!fileName.empty()) {
-				dEngine->loadData(fileName);
+				dEngine->loadData(fileName, FileDialog::file_source_selection);
 			}
 			fileDialogOpen = false;
 		}
