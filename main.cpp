@@ -11,52 +11,61 @@ int main() {
 
 	DataEngine dEngine;
     BotEngine bEngine;
-	GLFWwindow* window = QDisplay::GetInstance().getWindow();
 
-	while (!glfwWindowShouldClose(window)) {
+	while (!glfwWindowShouldClose(QDisplay::GetInstance().getWindow())) {
 
-		// Clear Frame
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
+		QDisplay::clearFrame();
 
+		// Display any captured errors as a modal popup over the top of the screen
         if (ErrorHandler::GetInstance().hasError()) {
             ErrorHandler::GetInstance().displayError();
         }
 
-        // Menu Bar
-        QDisplay_MainMenu();
+        // Main menu bar rendering & logic
+        QDisplay_MainMenu(&dEngine);
 
-		// File Handling
-		QDisplay_FileDialog(&dEngine);
-
+		// Once CSV data has been loaded, additional gui items become available
         if (dEngine.isLoaded()) {
-            // 2. Bot management
-            if (!bEngine.isLoaded()) {
+
+            // Bot Management GUI, attempt to load bots
+            if (!bEngine.isLoaded() && bEngine.getValidJSON()) {
                 bEngine.loadBots();
             }
-            {
-                ImGui::Begin("Bot Management");
-                ImGui::Text("Bots 'R Us!");
 
-                // TODO: display bots to run
+			// On invalid JSON throw warning and allow user to edit / reload json file
+			if (!bEngine.getValidJSON()) {
+				{
+					ImGui::Begin("Reload");
 
-                if (ImGui::Button("Start Processing")) {
-                    dEngine.processData();
-                }
-                ImGui::End();
-            }
+					if (ImGui::Button("Edit bots")) {
+						// TODO: launch editor for bots.json
+					}
+
+					if (ImGui::Button("Reload")) {
+						bEngine.setValidJSON(true);
+					}
+					ImGui::End();
+				}
+			// Success state, show Bot Management screen and allow for dataEngine to begin processing
+			} else {
+				{
+					ImGui::Begin("Bot Management");
+					ImGui::Text("Bots 'R Us!");
+
+					// TODO: display bots to run
+
+					if (ImGui::Button("Start Processing")) {
+						dEngine.processData(bEngine);
+					}
+					ImGui::End();
+				}
+			}
 
             // 3. Visualisation
         }
 
 		// Render and catch events
-		ImGui::Render();
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		glfwSwapBuffers(window);
-
-		glfwPollEvents();
+		QDisplay::processFrameAndEvents();
 	}
 
     return 0;

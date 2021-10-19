@@ -7,18 +7,34 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-/*
- * Singleton display class, mainly used for initialisation
- */
+// Singleton display class
 class QDisplay {
 public:
+
 	static QDisplay &GetInstance() {
 		static QDisplay display;
 		return display;
 	}
 
+	// Return currently active window
 	GLFWwindow* getWindow() {
 		return window;
+	}
+
+	// Clears frame
+	static void clearFrame() {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+	}
+
+	// Render & catch events
+	static void processFrameAndEvents() {
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		glfwSwapBuffers(QDisplay::GetInstance().getWindow());
+		glfwPollEvents();
 	}
 
 private:
@@ -34,25 +50,24 @@ private:
 	float backgroundG = 0.44f;
 	float backgroundB = 0.48f;
 
+	// Window resize callback
 	static void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
 		glViewport(0, 0, width, height);
 	}
 
-	/*
-	 * Cleans up all GL variables for clean exit
-	 */
-	void CleanupDisplay() {
+	// Cleans up all GL variables for clean exit
+	void cleanupDisplay() {
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 
-		if (window != nullptr) {
-			glfwDestroyWindow(window);
-		}
+		glfwDestroyWindow(window);
 		glfwTerminate();
 	}
 
+	// Initialisation
 	QDisplay() {
+
 		if (!glfwInit()) {
 			QLogger::GetInstance().Error("Couldn't initialize GLFW");
 		} else {
@@ -63,62 +78,58 @@ private:
 		glfwWindowHint(GLFW_DOUBLEBUFFER , 1);
 		glfwWindowHint(GLFW_DEPTH_BITS, 24);
 		glfwWindowHint(GLFW_STENCIL_BITS, 8);
-
-		glfwWindowHint(
-				GLFW_OPENGL_PROFILE,
-				GLFW_OPENGL_CORE_PROFILE
-		);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		#ifdef __APPLE__
-				// GL 3.2 + GLSL 150
-						glsl_version = "#version 150";
-						glfwWindowHint( // required on Mac OS
-							GLFW_OPENGL_FORWARD_COMPAT,
-							GL_TRUE
-							);
-						glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-						glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			// GL 3.2 + GLSL 150
+			glsl_version = "#version 150";
+			glfwWindowHint( // required on Mac OS
+				GLFW_OPENGL_FORWARD_COMPAT,
+				GL_TRUE
+				);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 		#elif __linux__
-				// GL 3.2 + GLSL 150
-				glsl_version = "#version 150";
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			// GL 3.2 + GLSL 150
+			glsl_version = "#version 150";
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		#elif _WIN32
-				// GL 3.0 + GLSL 130
-						glsl_version = "#version 130";
-						glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-						glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+			// GL 3.0 + GLSL 130
+			glsl_version = "#version 130";
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 		#endif
 
 		#ifdef _WIN32
-				// if it's a HighDPI monitor, try to scale everything
-						GLFWmonitor *monitor = glfwGetPrimaryMonitor();
-						float xscale, yscale;
-						glfwGetMonitorContentScale(monitor, &xscale, &yscale);
-						if (xscale > 1 || yscale > 1)
-						{
-							highDPIscaleFactor = xscale;
-							glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-						}
+			// if it's a HighDPI monitor, try to scale everything
+			GLFWmonitor *monitor = glfwGetPrimaryMonitor();
+			float xscale, yscale;
+			glfwGetMonitorContentScale(monitor, &xscale, &yscale);
+			if (xscale > 1 || yscale > 1)
+			{
+				highDPIscaleFactor = xscale;
+				glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+			}
 		#elif __APPLE__
-				// to prevent 1200x800 from becoming 2400x1600
-						glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
+			// to prevent 1200x800 from becoming 2400x1600
+			glfwWindowHint(GLFW_COCOA_RETINA_FRAMEBUFFER, GLFW_FALSE);
 		#endif
 
 		window = glfwCreateWindow(
-				windowWidth,
-				windowHeight,
-				programName.c_str(),
-				nullptr,
-				nullptr
+			windowWidth,
+			windowHeight,
+			programName.c_str(),
+			nullptr,
+			nullptr
 		);
 
 		if (!window) {
 			QLogger::GetInstance().Error("Couldn't create a GLFW window");
-			CleanupDisplay();
+			cleanupDisplay();
 		}
 
-		// watch window resizing
+		// Catch window resizing
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 		glfwMakeContextCurrent(window);
 
@@ -139,18 +150,16 @@ private:
 
 		if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 			QLogger::GetInstance().Error("Couldn't initialize GLAD");
-			CleanupDisplay();
+			cleanupDisplay();
 		} else {
 			QLogger::GetInstance().Info("GLAD initialized");
 		}
 
-		int actualWindowWidth, actualWindowHeight;
-		glfwGetWindowSize(window, &actualWindowWidth, &actualWindowHeight);
-		glViewport(0, 0, actualWindowWidth, actualWindowHeight);
+		// Set clear colour
 		glClearColor(backgroundR, backgroundG, backgroundB, 1.0f);
 	}
 
 	~QDisplay() {
-		CleanupDisplay();
+		cleanupDisplay();
 	}
 };

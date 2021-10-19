@@ -2,6 +2,7 @@
 
 #include "../../QLogger.h"
 #include "../../Display/ErrorHandler.h"
+#include "../BotEngine/BotEngine.h"
 #include <rapidcsv.h>
 
 class DataEngine {
@@ -10,7 +11,7 @@ public:
 	~DataEngine();
 
     void loadData(std::string filePath, int &fileSource);
-    void processData();
+    void processData(BotEngine &bEngine);
     bool isLoaded();
 
 private:

@@ -23,9 +23,7 @@ public:
         return err;
     }
 
-    /*
-     * Error displays popup over all other windows, clears after user closes popup
-     */
+	// Error displays popup over all other windows, clears after user closes dialog
     void displayError() {
         if (err) {
             ImGui::OpenPopup("ERROR");

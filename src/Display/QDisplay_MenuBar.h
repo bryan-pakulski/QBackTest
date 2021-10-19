@@ -1,33 +1,38 @@
 #pragma once
 
 #include <imgui.h>
+#include <fstream>
 #include <L2DFileDialog.h>
 #include "../Handlers/DataEngine/DataEngine.h"
 
 static std::string fileName;
+static std::stringstream logFileBuffer;
 bool fileDialogOpen = false;
+bool logFileOpen = false;
 
-void QDisplay_MainMenu() {
+/*
+ * Popup for displaying log file output
+ */
+void QDisplay_LogFile() {
+	if (logFileOpen) {
 
-    if(ImGui::BeginMainMenuBar()) {
+		ImGui::Begin("Log");
 
-        if (ImGui::BeginMenu("File")) {
+		ImGui::Text("%s", logFileBuffer.str().c_str());
 
-            if(ImGui::MenuItem("Import CSV")) {
-				fileDialogOpen = true;
-				FileDialog::fileDialogOpen = true;
-            }
+		if (ImGui::Button("Close")) {
+			logFileOpen = false;
+		}
 
-			if(ImGui::MenuItem("Open Log")) {
-				//TODO: open txt file
-			}
-            ImGui::EndMenu();
-        }
-
-        ImGui::EndMainMenuBar();
-    }
+		ImGui::End();
+	}
 }
 
+/*
+ * Popup for selecting CSV files for the data engine
+ *
+ * @param dEngine - reference to DataEngine
+ */
 void QDisplay_FileDialog(DataEngine* dEngine) {
 
 	if (fileDialogOpen) {
@@ -41,4 +46,44 @@ void QDisplay_FileDialog(DataEngine* dEngine) {
 			fileDialogOpen = false;
 		}
 	}
+}
+
+/*
+ * Main Menu renderer, contains logic for showing additional display items
+ *
+ * @param dEngine - reference to DataEngine
+ */
+void QDisplay_MainMenu(DataEngine* dEngine) {
+
+    if(ImGui::BeginMainMenuBar()) {
+
+        if (ImGui::BeginMenu("File")) {
+
+            if(ImGui::MenuItem("Import CSV")) {
+				fileDialogOpen = true;
+				FileDialog::fileDialogOpen = true;
+            }
+
+			if (ImGui::MenuItem("Open Log")) {
+				logFileOpen = true;
+				std::ifstream log;
+				log.open("QLog.txt");
+				logFileBuffer << log.rdbuf();
+				log.close();
+			}
+
+            ImGui::EndMenu();
+        }
+
+		if (ImGui::BeginMenu("Edit Bots")) {
+
+			ImGui::EndMenu();
+		}
+
+        ImGui::EndMainMenuBar();
+    }
+
+	// These will only render if their corresponding flags are set
+	QDisplay_LogFile();
+	QDisplay_FileDialog(dEngine);
 }

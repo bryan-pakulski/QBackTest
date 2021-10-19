@@ -14,6 +14,10 @@ BotEngine::~BotEngine() {
 
 }
 
+/*
+ * Loads bots from bots.json file and instantiates as a bot class
+ * On Error botData is reset and error flag is set on GUI side to inform user
+ */
 void BotEngine::loadBots() {
     QLogger::GetInstance().Info("Loading bots.json");
 
@@ -33,8 +37,10 @@ void BotEngine::loadBots() {
                 newBot.actions = getBotActions(element);
             } else {
                 ErrorHandler::GetInstance().setError("Malformed JSON, invalid type detected");
-                botData.clear();
-                return;
+				botData = nlohmann::json();
+				bots.clear();
+				setValidJSON(false);
+				return;
             }
         }
 
@@ -42,10 +48,20 @@ void BotEngine::loadBots() {
     }
 }
 
+/*
+ * Retrieve action data from JSON and map it using the DataMapping.h enumerations
+ *
+ * @param data
+ * @return std::vector<action>
+ */
 std::vector<action> BotEngine::getBotActions(nlohmann::json data) {
+
+	// TODO: Remake this function
     std::vector<action> actions;
 
     action botAction;
+
+	std::cout << "Working with: " << data << std::endl;
 
     for (nlohmann::json::iterator it = data.begin(); it != data.end(); ++it) {
 
@@ -77,7 +93,20 @@ std::vector<action> BotEngine::getBotActions(nlohmann::json data) {
 
 /*
  * Safety check for gui to avoid multiple calls to loadBots()
+ * Checks whether botData is currently empty
  */
 bool BotEngine::isLoaded() {
     return !botData.empty();
+}
+
+/*
+ * Safety flag for if loading JSON file fails initially
+ * Won't allow reloading until the JSON is fixed
+ */
+bool BotEngine::getValidJSON() {
+	return validJSON;
+}
+
+void BotEngine::setValidJSON(bool value) {
+	validJSON = value;
 }

@@ -28,11 +28,15 @@ public:
     void loadBots();
     bool isLoaded();
 
+	bool getValidJSON();
+	void setValidJSON(bool value);
+
 private:
     std::vector<Bot> bots;
     nlohmann::json botData;
+	bool validJSON = true;
 
-    std::vector<action> getBotActions(nlohmann::json data);
+    static std::vector<action> getBotActions(nlohmann::json data);
 };
 
 class Bot {
