@@ -4,12 +4,13 @@
 #include "src/Display/QDisplay.h"
 #include "src/Display/ErrorHandler.h"
 #include "src/Display/QDisplay_MenuBar.h"
-
 #include "src/Handlers/DataEngine/DataEngine.h"
+#include "src/Handlers/BotEngine/BotEngine.h"
 
 int main() {
 
 	DataEngine dEngine;
+    BotEngine bEngine;
 	GLFWwindow* window = QDisplay::GetInstance().getWindow();
 
 	while (!glfwWindowShouldClose(window)) {
@@ -30,9 +31,25 @@ int main() {
 		// File Handling
 		QDisplay_FileDialog(&dEngine);
 
-		// 2. Bot management
+        if (dEngine.isLoaded()) {
+            // 2. Bot management
+            if (!bEngine.isLoaded()) {
+                bEngine.loadBots();
+            }
+            {
+                ImGui::Begin("Bot Management");
+                ImGui::Text("Bots 'R Us!");
 
-		// 3. Visualisation
+                // TODO: display bots to run
+
+                if (ImGui::Button("Start Processing")) {
+                    dEngine.processData();
+                }
+                ImGui::End();
+            }
+
+            // 3. Visualisation
+        }
 
 		// Render and catch events
 		ImGui::Render();

@@ -271,8 +271,9 @@ namespace FileDialog {
 			}
 			// BryanP - Custom list box for selecting data source
 			ImGui::SameLine();
-			file_source_selection = 0;
-			ImGui::ListBox("Data Source", &file_source_selection, file_sources, IM_ARRAYSIZE(file_sources), 1);
+            ImGui::Text("Data Source");
+            ImGui::SameLine();
+			ImGui::Combo("Data", &file_source_selection, file_sources, IM_ARRAYSIZE(file_sources));
 
 			if (fileDialogError.size() > 0) {
 				ImGui::TextColored(ImColor(1.0f, 0.0f, 0.2f, 1.0f), &fileDialogError[0]);

@@ -9,6 +9,12 @@ public:
 	DataEngine();
 	~DataEngine();
 
-	static void loadData(std::string filePath, int &fileSource);
+    void loadData(std::string filePath, int &fileSource);
+    void processData();
+    bool isLoaded();
+
+private:
+    bool loadedFile = false;
+    rapidcsv::Document data;
 };
 

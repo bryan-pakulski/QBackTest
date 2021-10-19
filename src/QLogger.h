@@ -13,15 +13,15 @@ public:
 		return logger;
 	}
 
-	void Error(const std::string& message) {
+	void Error(const std::string& message, ...) {
 		log << std::string(getDateTime()).append(" - ERROR: ") << message << std::endl;
 	}
 
-	void Warning(const std::string& message) {
+	void Warning(const std::string& message, ...) {
 		log << std::string(getDateTime()).append(" - WARN: ") << message << std::endl;
 	}
 
-	void Info(const std::string& message) {
+	void Info(const std::string& message, ...) {
 		log << std::string(getDateTime()).append(" - INFO: ") << message << std::endl;
 	}
 

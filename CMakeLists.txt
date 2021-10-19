@@ -51,6 +51,22 @@ if(NOT glfw_POPULATED)
     )
 endif()
 
+# download and configure json project
+FetchContent_Declare(
+        json
+        GIT_REPOSITORY https://github.com/nlohmann/json.git
+)
+FetchContent_MakeAvailable(json)
+FetchContent_GetProperties(json)
+if(NOT json_POPULATED)
+    FetchContent_Populate(json)
+    add_subdirectory(
+            ${json_SOURCE_DIR}
+            ${json_BINARY_DIR}
+    )
+endif()
+
+
 # download the Dear ImGUI project
 FetchContent_Declare(
         imgui
@@ -108,7 +124,7 @@ find_package(OpenGL REQUIRED)  # for Dear ImGui
 find_package(Threads REQUIRED) # for GLFW
 find_package(X11 REQUIRED)     # for GLFW
 
-add_executable(QBackTest main.cpp src/Handlers/DataEngine/DataEngine.cpp)
+add_executable(QBackTest main.cpp src/Handlers/DataEngine/DataEngine.cpp src/Handlers/BotEngine/BotEngine.cpp)
 
 target_include_directories(
         QBackTest PRIVATE
@@ -119,6 +135,7 @@ target_include_directories(
         ${imgui_SOURCE_DIR}/backends
         ${imgui_SOURCE_DIR}/misc/cpp
         ${rapid-csv_SOURCE_DIR}/src
+        ${json_SOURCE_DIR}/single_include/nlohmann
         lib/L2DFileDialog
 )
 
