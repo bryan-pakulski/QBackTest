@@ -1,6 +1,3 @@
-#include <string>
-#include <iostream>
-
 #include "src/Display/QDisplay.h"
 #include "src/Display/ErrorHandler.h"
 #include "src/Display/QDisplay_MenuBar.h"
@@ -28,12 +25,12 @@ int main() {
         if (dEngine.isLoaded()) {
 
             // Bot Management GUI, attempt to load bots
-            if (!bEngine.isLoaded() && bEngine.getValidJSON()) {
+            if (!bEngine.isLoaded() && bEngine.validDataSource()) {
                 bEngine.loadBots();
             }
 
 			// On invalid JSON throw warning and allow user to edit / reload json file
-			if (!bEngine.getValidJSON()) {
+			if (!bEngine.validDataSource()) {
 				{
 					ImGui::Begin("Reload");
 
@@ -50,11 +47,9 @@ int main() {
 			} else {
 				{
 					ImGui::Begin("Bot Management");
-					ImGui::Text("Bots 'R Us!");
+					ImGui::Text("%s", bEngine.getBots().c_str());
 
-					// TODO: display bots to run
-
-					if (ImGui::Button("Start Processing")) {
+					if (ImGui::Button("Begin Processing")) {
 						dEngine.processData(bEngine);
 					}
 					ImGui::End();

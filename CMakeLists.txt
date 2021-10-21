@@ -124,7 +124,7 @@ find_package(OpenGL REQUIRED)  # for Dear ImGui
 find_package(Threads REQUIRED) # for GLFW
 find_package(X11 REQUIRED)     # for GLFW
 
-add_executable(QBackTest main.cpp src/Handlers/DataEngine/DataEngine.cpp src/Handlers/BotEngine/BotEngine.cpp)
+add_executable(QBackTest main.cpp src/Handlers/DataEngine/DataEngine.cpp src/Handlers/BotEngine/BotEngine.cpp src/Handlers/BotEngine/Bot.cpp)
 
 target_include_directories(
         QBackTest PRIVATE

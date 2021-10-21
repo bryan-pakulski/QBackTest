@@ -34,22 +34,12 @@ void BotEngine::loadBots() {
 
 		for (nlohmann::json::iterator it = botData.begin(); it != botData.end(); ++it) {
 			Bot newBot;
-
 			auto data = it.value();
 
-			for (auto& element : data) {
-
-				QLogger::GetInstance().Info(std::string("BOT JSON element: ").append(it.key()));
-
-				if (element.is_string()) {
-					newBot.name = element;
-				} else if (element.is_array()) {
-					newBot.actions = getBotActions(element);
-				} else {
-					rollBack();
-					return;
-				}
-			}
+			newBot.name = data["name"];
+			newBot.funds = data["funds"];
+			newBot.assets = data["assets"];
+			newBot.actions = getBotActions(data["actions"]);
 
 			bots.push_back(newBot);
 		}
@@ -69,37 +59,13 @@ void BotEngine::loadBots() {
  */
 std::vector<action> BotEngine::getBotActions(nlohmann::json data) {
 
-	// TODO: Remake this function
-    std::vector<action> actions;
-
-    action botAction;
+	std::vector<action> actions;
 
 	try {
-		QLogger::GetInstance().Info(std::string("BOT JSON action: ").append(data));
 
-		for (nlohmann::json::iterator it = data.begin(); it != data.end(); ++it) {
+		// TODO: parse data and retrieve actions
+		std::cout << data << std::endl;
 
-			if (it.key() == "triggerAction") {
-				botAction.triggerAction = triggerActionMapping[it.value()];
-			}
-			if (it.key() == "orderType") {
-				botAction.orderType = orderTypeMapping[it.value()];
-			}
-			if (it.key() == "triggers") {
-
-				for (nlohmann::json::iterator indicator_it = it.value().begin(); indicator_it != it.value().end(); ++ indicator_it) {
-					trigger botTrigger;
-
-					botTrigger.indicator = indicator_it.value()["indicator"];
-					botTrigger.triggerColumn = indicator_it.value()["triggerColumn"];
-					botTrigger.triggerValue = indicator_it.value()["triggerValue"];
-
-					botAction.triggers.push_back(botTrigger);
-				}
-			}
-
-			actions.push_back(botAction);
-		}
 	} catch (...) {
 		// Catch & Rethrow, to be caught in loadBots()
 		std::exception_ptr e = std::current_exception();
@@ -122,10 +88,20 @@ bool BotEngine::isLoaded() {
  * Safety flag for if loading JSON file fails initially
  * Won't allow reloading until the JSON is fixed
  */
-bool BotEngine::getValidJSON() {
+bool BotEngine::validDataSource() {
 	return validJSON;
 }
 
 void BotEngine::setValidJSON(bool value) {
 	validJSON = value;
+}
+
+std::string BotEngine::getBots() {
+	std::string botList;
+
+	for (Bot &b : bots) {
+		botList.append(b.getName() + "\n");
+	}
+
+	return botList;
 }

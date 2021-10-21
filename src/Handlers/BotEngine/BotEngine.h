@@ -5,20 +5,10 @@
 #include <fstream>
 
 #include <json.hpp>
+#include "Bot.h"
 
 class Bot;
 
-struct trigger {
-    std::string indicator;
-    std::string triggerColumn;
-    std::string triggerValue;
-};
-
-struct action {
-    int triggerAction;
-    int orderType;
-    std::vector<trigger> triggers;
-};
 
 class BotEngine {
 public:
@@ -26,9 +16,10 @@ public:
     ~BotEngine();
 
     void loadBots();
+	std::string getBots();
     bool isLoaded();
 
-	bool getValidJSON();
+	bool validDataSource();
 	void setValidJSON(bool value);
 
 private:
@@ -37,13 +28,4 @@ private:
 
 	void rollBack();
     std::vector<action> getBotActions(nlohmann::json data);
-};
-
-class Bot {
-public:
-    std::string name;
-
-private:
-    std::vector<action> actions;
-    friend class BotEngine;
 };
