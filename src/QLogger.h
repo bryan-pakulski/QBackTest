@@ -8,9 +8,26 @@
 class QLogger {
 
 public:
+
 	static QLogger &GetInstance() {
 		static QLogger logger;
 		return logger;
+	}
+
+	/*
+	 * Handle a generic captured exception (C++11) using the ... operator
+	 * Exception is rethrown and error is logged
+	 *
+	 * @param ePtr
+	 */
+	static void ExceptionHandler(std::exception_ptr ePtr) {
+		try {
+			if (ePtr) {
+				std::rethrow_exception(ePtr);
+			}
+		} catch (const std::exception &e) {
+			QLogger::GetInstance().Error(std::string("Caught Exception: ").append(e.what()));
+		}
 	}
 
 	void Error(const std::string& message, ...) {

@@ -33,10 +33,10 @@ public:
 
 private:
     std::vector<Bot> bots;
-    nlohmann::json botData;
 	bool validJSON = true;
 
-    static std::vector<action> getBotActions(nlohmann::json data);
+	void rollBack();
+    std::vector<action> getBotActions(nlohmann::json data);
 };
 
 class Bot {
