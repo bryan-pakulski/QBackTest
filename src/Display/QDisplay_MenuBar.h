@@ -18,6 +18,7 @@ void QDisplay_LogFile() {
 
 		ImGui::Begin("Log");
 
+		// TODO: Text cuts long strings, TextUnformatted crashes, find workaround
 		ImGui::Text("%s", logFileBuffer.str().c_str());
 
 		if (ImGui::Button("Close")) {
@@ -64,8 +65,15 @@ void QDisplay_MainMenu(DataEngine* dEngine) {
 				FileDialog::fileDialogOpen = true;
             }
 
+			if (ImGui::MenuItem("Edit Bots")) {
+				// TODO: open bots.json programmatically
+			}
+
 			if (ImGui::MenuItem("Open Log")) {
+				// Set log flags and clear bugger
 				logFileOpen = true;
+				logFileBuffer.str(std::string());
+
 				std::ifstream log;
 				log.open("QLog.txt");
 				logFileBuffer << log.rdbuf();
@@ -74,11 +82,6 @@ void QDisplay_MainMenu(DataEngine* dEngine) {
 
             ImGui::EndMenu();
         }
-
-		if (ImGui::BeginMenu("Edit Bots")) {
-
-			ImGui::EndMenu();
-		}
 
         ImGui::EndMainMenuBar();
     }
