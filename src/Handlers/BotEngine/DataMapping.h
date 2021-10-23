@@ -9,7 +9,7 @@ enum orderType {
     LIMIT
 };
 
-enum triggerAction {
+enum actionType {
     BUY,
     SELL,
     CANCEL
@@ -27,9 +27,9 @@ std::unordered_map<std::string, int> orderTypeMapping({
 });
 
 std::unordered_map<std::string, int> triggerActionMapping({
-    {"BUY",    triggerAction::BUY},
-    {"SELL",   triggerAction::SELL},
-    {"CANCEL", triggerAction::CANCEL}
+    {"BUY",    actionType::BUY},
+    {"SELL",   actionType::SELL},
+    {"CANCEL", actionType::CANCEL}
 });
 
 std::unordered_map<std::string, int> indicatorMapping({

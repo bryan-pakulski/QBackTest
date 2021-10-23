@@ -63,6 +63,33 @@ std::vector<action> BotEngine::getBotActions(nlohmann::json data) {
 
 	try {
 
+		for (auto &botAction : data) {
+			action currentAction;
+
+			currentAction.actionType = triggerActionMapping[botAction["actionType"]];
+			currentAction.orderType = orderTypeMapping[botAction["orderType"]];
+			currentAction.orderPrice = botAction["orderPrice"];
+			currentAction.orderAmount = botAction["orderAmount"];
+
+			// Triggers
+			for (auto &botTrigger : botAction["triggers"]) {
+				trigger currentTrigger;
+
+				currentTrigger.indicator = botTrigger["indicator"];
+				currentTrigger.triggerColumn = botTrigger["triggerColumn"];
+				currentTrigger.triggerType = botTrigger["triggerType"];
+
+				// triggerValue is optional
+				if (botTrigger.contains("triggerValue")) {
+					currentTrigger.triggerValue = botTrigger["triggerValue"];
+				}
+
+				currentAction.triggers.push_back(currentTrigger);
+			}
+
+			actions.push_back(currentAction);
+		}
+
 		// TODO: parse data and retrieve actions
 		std::cout << data << std::endl;
 
