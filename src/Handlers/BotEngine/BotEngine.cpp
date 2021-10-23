@@ -90,9 +90,6 @@ std::vector<action> BotEngine::getBotActions(nlohmann::json data) {
 			actions.push_back(currentAction);
 		}
 
-		// TODO: parse data and retrieve actions
-		std::cout << data << std::endl;
-
 	} catch (...) {
 		// Catch & Rethrow, to be caught in loadBots()
 		std::exception_ptr e = std::current_exception();
