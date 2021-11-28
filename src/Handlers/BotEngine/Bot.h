@@ -18,6 +18,23 @@ struct action {
 	std::vector<trigger> triggers;
 };
 
+struct order {
+
+};
+
+struct successfulOrders {
+
+};
+
+struct pendingOrders {
+
+};
+
+struct canceledOrders {
+
+};
+
+
 class Bot {
 
 public:

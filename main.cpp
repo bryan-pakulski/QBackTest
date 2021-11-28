@@ -1,3 +1,5 @@
+#include "lib/MemoryProfiler/MemProfiler.h"
+
 #include "src/Display/QDisplay.h"
 #include "src/Display/ErrorHandler.h"
 #include "src/Display/QDisplay_MenuBar.h"

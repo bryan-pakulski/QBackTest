@@ -124,7 +124,7 @@ find_package(OpenGL REQUIRED)  # for Dear ImGui
 find_package(Threads REQUIRED) # for GLFW
 find_package(X11 REQUIRED)     # for GLFW
 
-add_executable(QBackTest main.cpp src/Handlers/DataEngine/DataEngine.cpp src/Handlers/BotEngine/BotEngine.cpp src/Handlers/BotEngine/Bot.cpp)
+add_executable(QBackTest main.cpp src/Handlers/DataEngine/DataEngine.cpp src/Handlers/BotEngine/BotEngine.cpp src/Handlers/BotEngine/Bot.cpp src/Handlers/DataEngine/OrderBook.cpp)
 
 target_include_directories(
         QBackTest PRIVATE
@@ -136,7 +136,9 @@ target_include_directories(
         ${imgui_SOURCE_DIR}/misc/cpp
         ${rapid-csv_SOURCE_DIR}/src
         ${json_SOURCE_DIR}/single_include/nlohmann
+        lib
         lib/L2DFileDialog
+        lib/MemoryProfiler
 )
 
 target_link_libraries(
